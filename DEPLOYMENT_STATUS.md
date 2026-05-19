@@ -1,34 +1,35 @@
 # Deployment Status
 
 ## Team
-
-Team number: 14
-OpenClaw: https://ai-native-14.digitalcoa.ch
-GitHub: https://github.com/DigitalCoa-ch/ai-native-team-14
-Published app: https://team-14.apps.digitalcoa.ch
+- Team number: 14
+- OpenClaw: https://ai-native-14.digitalcoa.ch
+- GitHub: https://github.com/DigitalCoa-ch/ai-native-team-14
+- Published app: **NEEDS RE-DEPLOY** (was `https://team-14.apps.digitalcoa.ch`)
 
 ## Current Status
 
-Last commit: 59f1a03 - "Deploy tracker landing page + HTML files via Vercel"
-Last push: Mon May 18 12:00 UTC
-Vercel status: Build successful (✓ Compiled successfully, 4 static pages)
-Public URL checked: 404 - DEPLOYMENT_NOT_FOUND (Vercel deployment may be delayed or project needs re-link)
+**Last commit:** `95add0f` - "chore: update mission and gemini context" (2026-05-19 10:55 UTC)
+**Push to GitHub:** ✅ Done
 
-## What Was Built
+## What Exists
 
-3 tracker variants (self-contained HTML files):
-- `index.html` - Sofia Year Tracker (soft girl, cycle tracking)
-- `ceos-tracker.html` - CEO's Tracker (same as Sofia, rebranded)
-- `manly-tracker.html` - Manly Tracker (steel blue, progressive overload)
+- **Next.js 14 app** at `/` with links to 3 tracker variants
+- **Static HTML trackers** in `public/ (index.html, ceos-tracker.html, manly-tracker.html)
+- **Sofia Year Tracker** (index.html) — 28,629 bytes, soft girl aesthetic, 12 widgets, localStorage
+- **CEOs Tracker** (ceos-tracker.html) — same as Sofia, rebranded
+- **Manly Tracker** (manly-tracker.html) — steel blue, progressive overload fitness tracker
 
-Static landing page at `/` linking to all 3 trackers.
+## Vercel Deployment
 
-## Known Issue
+**Expected URL:** `https://team-14.apps.digitalcoa.ch`
+**Current status:** 404 — needs re-deploy
+**Deployment method:** GitHub push to `main` branch (Vercel auto-deploy)
 
-Vercel deployment not found at `https://team-14.apps.digitalcoa.ch`. The push to GitHub triggers Vercel, but deployment may need:
-1. Manual re-link of Vercel project to GitHub repo, OR
-2. Waiting for Vercel to process the deployment queue
+**Steps to fix:**
+1. Check Vercel dashboard for the project
+2. Ensure `vercel.json` or `vercel.toml` is configured if needed
+3. The `public/` directory is served as static files by Next.js
+4. Or: push an empty commit to trigger Vercel: `git commit --allow-empty -m "trigger deploy"`
 
 ## Rule
-
-Deployments happen through GitHub push to `main`. Do not use direct Vercel CLI deployment unless instructed.
+Deployments happen through GitHub push to `main`. Do not use direct Vercel CLI deployment.
