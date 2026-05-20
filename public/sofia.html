@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sofia — Executive Calibration</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0D0B14;color:#E8E0F0;font-family:'Inter',system-ui,-apple-system,sans-serif;min-height:100vh;padding:40px 20px;line-height:1.5}
+.container{max-width:760px;margin:0 auto}
+.header{margin-bottom:40px;border-bottom:1px solid #2E2640;padding-bottom:20px}
+.brand{display:flex;align-items:center;gap:12px;margin-bottom:8px}
+.brand-name{font-size:24px;font-weight:700;color:#C8B8E8;letter-spacing:0.05em}
+.brand-sub{font-size:11px;color:#6B5F70;letter-spacing:0.2em;text-transform:uppercase}
+.header-note{font-size:12px;color:#6B5F70;margin-top:4px}
+.section-title{font-size:11px;letter-spacing:0.2em;color:#9B8FA0;text-transform:uppercase;font-weight:500;margin-bottom:20px}
+.card{background:#161222;border:1px solid #2E2640;border-radius:12px;padding:24px;margin-bottom:16px}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+label.field-label{display:block;font-size:11px;letter-spacing:0.12em;color:#8A7A90;text-transform:uppercase;margin-bottom:8px}
+input,select,textarea{width:100%;background:#1A1625;border:1px solid #2E2640;border-radius:8px;padding:10px 14px;color:#E8E0F0;font-size:14px;outline:none;font-family:inherit;box-sizing:border-box;transition:border-color 0.2s}
+input:focus,select:focus,textarea:focus{border-color:#6B4FA0}
+textarea{resize:vertical;min-height:80px}
+.habit-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.habit-btn{padding:8px 12px;border-radius:8px;border:1px solid #2E2640;background:#1A1625;color:#6B5F70;font-size:12px;cursor:pointer;text-align:center;transition:all 0.2s;font-family:inherit}
+.habit-btn.active{background:#2A2040;border-color:#6B4FA0;color:#C8B8E8}
+.btn-primary{background:linear-gradient(135deg,#6B4FA0,#9B7FD0);border:none;color:#fff;padding:14px 32px;border-radius:8px;font-size:13px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;transition:opacity 0.2s;font-family:inherit;width:100%}
+.btn-primary:hover{opacity:0.85}
+.btn-ghost{background:transparent;border:none;color:#6B4FA0;font-size:12px;cursor:pointer;font-family:inherit;padding:8px 16px}
+.signal-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
+.signal-badge{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:#1A1625;border-radius:8px;border:1px solid #2E2640}
+.signal-label{font-size:11px;color:#8A7A90;text-transform:uppercase;letter-spacing:0.1em}
+.signal-value{font-size:13px;font-weight:600}
+.val-high{color:#4ADE80}.val-moderate{color:#FACC15}.val-low{color:#F87171}.val-unknown{color:#9CA3AF}
+.briefing-text{font-size:14px;line-height:1.7;color:#D0C8E0;margin-bottom:20px}
+.rec-block{background:#1A1625;border-radius:8px;padding:14px 16px;margin-bottom:10px;border-left:3px solid #6B4FA0}
+.rec-label{font-size:10px;letter-spacing:0.15em;color:#6B5F70;text-transform:uppercase;margin-bottom:6px}
+.rec-text{font-size:13px;color:#C8B8E8}
+.approval-grid{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}
+.approval-btn{padding:10px 18px;border-radius:8px;border:1px solid #2E2640;background:transparent;color:#6B5F70;font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;transition:all 0.2s;font-family:inherit}
+.approval-btn.active{background:#2A2040;border-color:#9B7FD0;color:#C8B8E8}
+.fp-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.fp-item{background:#1A1625;border-radius:8px;padding:14px;border:1px solid #2E2640}
+.fp-label{font-size:10px;letter-spacing:0.15em;color:#6B5F70;text-transform:uppercase;margin-bottom:6px}
+.fp-value{font-size:13px;color:#C8B8E8}
+.warning-box{background:#1F1515;border:1px solid #7F3A3A;border-radius:8px;padding:12px 16px;margin:12px 0;font-size:13px;color:#F87171}
+.missing-box{background:#1A1520;border:1px solid #4A3060;border-radius:8px;padding:12px 16px;margin:12px 0;font-size:13px;color:#9B8FA0}
+.mode-banner{text-align:center;padding:20px;margin-bottom:24px;border-radius:12px;font-size:18px;font-weight:700;letter-spacing:0.15em}
+.mode-high_output{background:linear-gradient(135deg,#0F2A1A,#162A20);border:1px solid #2A4A30;color:#4ADE80}
+.mode-normal{background:linear-gradient(135deg,#1A1A2E,#1E2030);border:1px solid #2E2A40;color:#9CA3AF}
+.mode-maintenance{background:linear-gradient(135deg,#2A2010,#302510);border:1px solid #4A3A20;color:#FACC15}
+.mode-recovery{background:linear-gradient(135deg,#2A1010,#301510);border:1px solid #4A2020;color:#F87171}
+.stage-ind{display:inline-block;background:#2A2040;border:1px solid #3A2860;border-radius:4px;padding:2px 8px;font-size:10px;color:#9B8FA0;letter-spacing:0.1em;text-transform:uppercase}
+.track-list{display:flex;flex-direction:column;gap:6px}
+.track-item{font-size:12px;color:#8A7A90;padding-left:12px;border-left:2px solid #2E2640}
+.priority-input-wrap{margin-top:16px}
+.final-plan-full{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+@media(max-width:600px){.grid-2,.grid-3,.habit-grid,.signal-grid,.fp-grid,.final-plan-full{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div class="brand"><span class="brand-name">SOFIA</span><span class="brand-sub">Executive Calibration</span></div>
+    <div class="header-note">Date: <span id="todayDate"></span>&nbsp;|&nbsp;Stage: <span class="stage-ind" id="stageInd">INPUT</span></div>
+  </div>
+
+  <!-- INPUT STAGE -->
+  <div id="stageInput">
+    <div class="section-title">Daily Input</div>
+    <div class="card">
+      <div class="grid-2">
+        <div><label class="field-label">Sleep Hours</label><input type="number" id="sleepHours" placeholder="7.5" step="0.5" min="0" max="12"></div>
+        <div><label class="field-label">Sleep Quality</label>
+          <select id="sleepQuality"><option value="">Select...</option><option value="high">High — deep and restorative</option><option value="moderate">Moderate — some fragmentation</option><option value="low">Low — poor or broken sleep</option></select>
+        </div>
+      </div>
+      <div style="height:16px"></div>
+      <div class="grid-2">
+        <div><label class="field-label">Wake Energy (1–10)</label><input type="number" id="wakeEnergy" placeholder="7" min="1" max="10"></div>
+        <div><label class="field-label">Stress Level (1–10)</label><input type="number" id="stressLevel" placeholder="5" min="1" max="10"></div>
+      </div>
+      <div style="height:16px"></div>
+      <div class="grid-2">
+        <div><label class="field-label">Calendar Load</label>
+          <select id="calendarLoad"><option value="">Select...</option><option value="light">Light — fewer than 3 meetings</option><option value="moderate">Moderate — 3–5 meetings</option><option value="heavy">Heavy — 6–8 meetings</option><option value="saturated">Saturated — more than 8</option></select>
+        </div>
+        <div><label class="field-label">Deep Work Available</label>
+          <select id="deepWork"><option value="">Select...</option><option value="none">None</option><option value="1 hour">1 hour</option><option value="2 hours">2 hours</option><option value="3+ hours">3+ hours</option></select>
+        </div>
+      </div>
+      <div style="height:16px"></div>
+      <div><label class="field-label">Cycle Phase (Optional — contextual signal only)</label>
+        <select id="cyclePhase"><option value="unknown">Prefer not to say</option><option value="menstrual">Menstrual</option><option value="follicular">Follicular</option><option value="ovulatory">Ovulatory</option><option value="luteal">Luteal</option></select>
+      </div>
+    </div>
+    <div class="card">
+      <label class="field-label" style="margin-bottom:12px">Completed Habits</label>
+      <div class="habit-grid">
+        <button class="habit-btn" onclick="toggleHabit(this,'Training')">Training</button>
+        <button class="habit-btn" onclick="toggleHabit(this,'Nutrition')">Nutrition</button>
+        <button class="habit-btn" onclick="toggleHabit(this,'Inbox Zero')">Inbox Zero</button>
+        <button class="habit-btn" onclick="toggleHabit(this,'Strategy Block')">Strategy Block</button>
+        <button class="habit-btn" onclick="toggleHabit(this,'Learning')">Learning</button>
+        <button class="habit-btn" onclick="toggleHabit(this,'Reflection')">Reflection</button>
+      </div>
+    </div>
+    <div class="card">
+      <div><label class="field-label">Main Priority Today</label><input type="text" id="mainPriority" placeholder="e.g. Close Series A term sheet with lead investor"></div>
+      <div style="height:16px"></div>
+      <div><label class="field-label">Optional Notes</label><textarea id="notes" placeholder="Any context — how you slept, what's weighing on you, what's non-negotiable today."></textarea></div>
+    </div>
+    <div id="missingAlert" class="missing-box" style="display:none"><strong>Missing required fields:</strong> <span id="missingList"></span></div>
+    <button class="btn-primary" onclick="generateBriefing()">Generate AI Briefing</button>
+  </div>
+
+  <!-- BRIEFING STAGE -->
+  <div id="stageBriefing" style="display:none">
+    <div class="section-title">AI Signal Analysis</div>
+    <div id="modeBanner" class="mode-banner"></div>
+    <div id="signalsGrid" class="signal-grid"></div>
+    <div class="card">
+      <div class="section-title" style="margin-bottom:16px">Executive Briefing</div>
+      <div id="briefingText" class="briefing-text"></div>
+      <div id="recommendationBlock" class="rec-block">
+        <div class="rec-label">Main Priority Recommendation</div>
+        <div id="priorityRec" class="rec-text"></div>
+      </div>
+      <div class="grid-2" style="gap:10px">
+        <div class="rec-block"><div class="rec-label">One Thing to Avoid</div><div id="avoidRec" class="rec-text"></div></div>
+        <div class="rec-block"><div class="rec-label">Energy Strategy</div><div id="energyRec" class="rec-text"></div></div>
+        <div class="rec-block"><div class="rec-label">Schedule Adjustment</div><div id="scheduleRec" class="rec-text"></div></div>
+        <div class="rec-block"><div class="rec-label">Risk Flag</div><div id="riskRec" class="rec-text"></div></div>
+      </div>
+    </div>
+    <div id="confidenceRow" style="text-align:center;font-size:12px;color:#6B5F70;margin:12px 0">Confidence Score: <span id="confidenceDisplay" style="font-weight:600;color:#9B8FA0"></span></div>
+    <div id="briefingMissingAlert" class="missing-box" style="display:none"><strong>Missing data:</strong> <span id="briefingMissingList"></span></div>
+    <div class="card">
+      <div class="section-title">Human Approval Checkpoint</div>
+      <div style="font-size:13px;color:#8A7A90;margin-bottom:16px">Does this mode accurately reflect your capacity today?</div>
+      <div id="warningBox" class="warning-box" style="display:none"></div>
+      <div id="priorityInputWrap" class="priority-input-wrap" style="display:none">
+        <label class="field-label">Enter Adjusted Priority</label>
+        <input type="text" id="priorityInput" placeholder="Your new priority...">
+        <div style="height:12px"></div>
+        <button class="btn-primary" onclick="submitAdjustedPriority()">Recalculate Plan</button>
+      </div>
+      <div id="approvalButtons" class="approval-grid">
+        <button class="approval-btn" id="btnApprove" onclick="handleApproval('approve')">Approve Plan</button>
+        <button class="approval-btn" id="btnAdjust" onclick="handleApproval('adjust_priority')">Adjust Priority</button>
+        <button class="approval-btn" id="btnLower" onclick="handleApproval('lower_intensity')">Lower Intensity</button>
+        <button class="approval-btn" id="btnHigher" onclick="handleApproval('increase_intensity')">Increase Intensity</button>
+        <button class="approval-btn" id="btnAddData" onclick="handleApproval('add_data')">Add Missing Data</button>
+      </div>
+    </div>
+    <button class="btn-ghost" onclick="resetAll()" style="margin-top:8px">Start Over</button>
+  </div>
+
+  <!-- FINAL STAGE -->
+  <div id="stageFinal" style="display:none">
+    <div class="section-title">Confirmed Daily Operating Plan</div>
+    <div id="finalModeBanner" class="mode-banner" style="margin-bottom:24px"></div>
+    <div class="card">
+      <div class="final-plan-full">
+        <div class="fp-item"><div class="fp-label">Confirmed Mode</div><div id="fpMode" class="fp-value"></div></div>
+        <div class="fp-item"><div class="fp-label">Confirmed Priority</div><div id="fpPriority" class="fp-value"></div></div>
+        <div class="fp-item"><div class="fp-label">Secondary Task</div><div id="fpSecondary" class="value"></div></div>
+        <div class="fp-item"><div class="fp-label">What to Avoid</div><div id="fpAvoid" class="fp-value"></div></div>
+        <div class="fp-item"><div class="fp-label">Recommended Workload</div><div id="fpWorkload" class="fp-value"></div></div>
+        <div class="fp-item"><div class="fp-label">Recovery Action</div><div id="fpRecovery" class="fp-value"></div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="section-title">Evening Review</div>
+      <div class="rec-block" style="border-left-color:#4A3060">
+        <div class="rec-label">Tonight's Question</div>
+        <div class="rec-text" style="font-style:italic">What reduced your performance today?</div>
+      </div>
+      <div style="margin-top:12px">
+        <div class="rec-label" style="margin-bottom:8px">Data to Track Tonight</div>
+        <div class="track-list">
+          <div class="track-item">actual energy level (end of day)</div>
+          <div class="track-item">priority completion (closed or parked)</div>
+          <div class="track-item">stress level (post-work)</div>
+          <div class="track-item">sleep target for tomorrow</div>
+        </div>
+      </div>
+    </div>
+    <button class="btn-ghost" onclick="resetAll()" style="margin-top:8px">Run Calibration Again</button>
+  </div>
+</div>
+
+<script>
+const REQUIRED = ['sleepHours','sleepQuality','wakeEnergy','stressLevel','calendarLoad','mainPriority'];
+const FIELD_LABELS = {sleepHours:'Sleep Hours',sleepQuality:'Sleep Quality',wakeEnergy:'Wake Energy',stressLevel:'Stress Level',calendarLoad:'Calendar Load',mainPriority:'Main Priority'};
+const modeClass = {'HIGH OUTPUT':'mode-high_output','NORMAL':'mode-normal','MAINTENANCE':'mode-maintenance','RECOVERY':'mode-recovery'};
+const valColor = {high:'val-high',moderate:'val-moderate',low:'val-low',elevated:'val-low',normal:'val-high',maintenance:'val-moderate',recovery:'val-low',high_output:'val-high',unknown:'val-unknown'};
+
+let state = {stage:'input',data:{sleepHours:'',sleepQuality:'',wakeEnergy:'',stressLevel:'',calendarLoad:'',deepWork:'',cyclePhase:'unknown',completedHabits:[],mainPriority:'',notes:''},signals:null,briefing:null,finalPlan:null,approval:'',intensityWarning:false};
+
+document.getElementById('todayDate').textContent = new Date().toISOString().split('T')[0];
+
+function getData() {
+  return {sleepHours:document.getElementById('sleepHours').value,sleepQuality:document.getElementById('sleepQuality').value,wakeEnergy:document.getElementById('wakeEnergy').value,stressLevel:document.getElementById('stressLevel').value,calendarLoad:document.getElementById('calendarLoad').value,deepWork:document.getElementById('deepWork').value,cyclePhase:document.getElementById('cyclePhase').value,completedHabits:state.data.completedHabits,mainPriority:document.getElementById('mainPriority').value,notes:document.getElementById('notes').value};
+}
+
+function getMissing(data) {
+  return REQUIRED.filter(f=>!data[f]);
+}
+
+function analyzeSignals(data,missing) {
+  let recoveryScore=50,cognitiveScore=50,base=70-missing.length*5;
+  const sn=parseFloat(data.sleepHours);
+  if(!isNaN(sn)){if(sn>=7.5)recoveryScore+=25;else if(sn>=6)recoveryScore+=10;else if(sn>=4)recoveryScore-=10;else recoveryScore-=25;}
+  if(data.sleepQuality==='high')recoveryScore+=20;else if(data.sleepQuality==='moderate')recoveryScore+=5;else if(data.sleepQuality==='low')recoveryScore-=15;
+  const en=parseInt(data.wakeEnergy);
+  if(!isNaN(en)){if(en>=8)recoveryScore+=20;else if(en<5)recoveryScore-=20;}
+  const stressn=parseInt(data.stressLevel);
+  if(!isNaN(stressn)){if(stressn>=8)cognitiveScore+=40;else if(stressn>=6)cognitiveScore+=20;else if(stressn<=3)cognitiveScore-=20;}
+  if(data.calendarLoad==='heavy'||data.calendarLoad==='saturated')cognitiveScore+=30;else if(data.calendarLoad==='moderate')cognitiveScore+=10;else if(data.calendarLoad==='light')cognitiveScore-=15;
+  if(data.deepWork==='none')cognitiveScore+=15;else if(data.deepWork==='1 hour')cognitiveScore+=5;else if(data.deepWork==='3+ hours')cognitiveScore-=15;
+  const burnoutRisk=(recoveryScore<40&&cognitiveScore>60)||(recoveryScore<55&&cognitiveScore>70)||recoveryScore<30?'elevated':'moderate';
+  const execCap=recoveryScore>=70&&cognitiveScore<50?'high_output':recoveryScore>=50?'normal':recoveryScore>=35?'maintenance':'recovery';
+  const decisionRisk=burnoutRisk==='elevated'?'high':cognitiveScore>60?'medium':'low';
+  const recoveryStatus=recoveryScore>=65?'high':recoveryScore>=45?'moderate':recoveryScore>=25?'low':'unknown';
+  const cognitiveLoad=cognitiveScore>=70?'high':cognitiveScore>=45?'moderate':'low';
+  return {recoveryStatus,cognitiveLoad,burnoutRisk,executionCapacity:execCap,decisionQualityRisk:decisionRisk,confidenceScore:Math.max(15,Math.min(95,base))};
+}
+
+function genBriefing(data,signals,missing) {
+  const modeMap={'high_output':'HIGH OUTPUT','normal':'NORMAL','maintenance':'MAINTENANCE','recovery':'RECOVERY'};
+  const mode=modeMap[signals.executionCapacity]||'MAINTENANCE';
+  const priority=data.mainPriority||'unspecified';
+  let bt=`Today should be treated as ${mode} Mode. `;
+  if(signals.recoveryStatus==='low'&&signals.cognitiveLoad==='high')bt+='Your recovery is low while cognitive load is high. Prioritize execution of essential tasks only, not strategic decision-making. ';
+  else if(signals.recoveryStatus==='high'&&signals.cognitiveLoad==='low')bt+='Your recovery is high and cognitive load is low — an optimal operating window. Use it for your highest-stakes work. ';
+  else if(signals.burnoutRisk==='elevated')bt+='Elevated burnout risk is present. Do not add new commitments today. Protect your existing capacity. ';
+  else bt+='You are operating within normal parameters. Maintain steady execution. ';
+  if(data.cyclePhase&&data.cyclePhase!=='unknown')bt+=`Cycle phase (${data.cyclePhase}) noted as contextual signal only — does not predict performance or diagnose anything. `;
+  let avoid='Taking on new commitments or reactive tasks.',energy='Protect your morning window. Avoid multitasking.',schedule='Decline non-essential meetings. Protect deep work blocks.',riskFlag='None.';
+  if(signals.burnoutRisk==='elevated'){avoid='Multitasking, reactive responses, and any high-stakes negotiation without a break.';energy='Limit continuous work to 90-minute blocks. Walk between sessions.';schedule='Push all non-essential meetings to tomorrow. Only attend pre-scheduled critical calls.';riskFlag=`Decision quality risk is ${signals.decisionQualityRisk}. Burnout risk is elevated. Judgment may degrade under extended focus.`;}
+  if(signals.executionCapacity==='high_output'){avoid='Shallow work, inbox management, or context-switching that fragments attention.';energy='Use the morning for your hardest problem. Deep work first, communication second.';schedule='Calendar is clear for focused execution. Protect it from interruption.';riskFlag='Low risk — but watch for overcommit once energy is high.';}
+  return {todayMode:mode,briefing:bt.trim(),mainPriorityRecommendation:priority?`Focus exclusively on: "${priority}". Do not open secondary tasks until this is resolved or consciously parked.`:'No priority submitted. Identify one essential task before proceeding.',oneThingToAvoid:avoid,energyStrategy:energy,scheduleAdjustment:schedule,riskFlag,confidenceScore:signals.confidenceScore,missingData:missing};
+}
+
+function genFinalPlan(briefing,data,adjustment) {
+  let priority=data.mainPriority||'Unspecified task',workload='Standard — complete priority, then optional secondary tasks.',secondary='None — focus only on the confirmed priority.',mode=briefing.todayMode;
+  if(adjustment==='lower'){workload='Minimal — one essential task only. Do not add anything else.';secondary='Everything else is deferrable. Park it.';}
+  else if(adjustment==='higher'&&briefing.todayMode!=='HIGH OUTPUT'){workload='Controlled high-output — two essential tasks maximum. No more.';secondary='One secondary task only if capacity remains after priority is closed.';}
+  const recoveryAction=mode==='RECOVERY'?'Full rest. No work output expected. Restore first.':mode==='MAINTENANCE'?'20-minute walk between deep work blocks. No screens during break.':'Standard recovery hygiene — movement, hydration,间断ed deep work.';
+  return {confirmedMode:mode,confirmedPriority:priority,secondaryTask:secondary,avoid:briefing.oneThingToAvoid,recommendedWorkload:workload,recoveryAction,eveningReviewQuestion:'What reduced your performance today?',dataToTrackTonight:['actual energy level (end of day)','priority completion (closed or parked)','stress level (post-work)','sleep target for tomorrow']};
+}
+
+function toggleHabit(btn,name) {
+  const idx=state.data.completedHabits.indexOf(name);
+  if(idx>-1){state.data.completedHabits.splice(idx,1);btn.classList.remove('active');}
+  else{state.data.completedHabits.push(name);btn.classList.add('active');}
+}
+
+function showStage(name) {
+  document.getElementById('stageInput').style.display=name==='input'?'block':'none';
+  document.getElementById('stageBriefing').style.display=name==='briefing'?'block':'none';
+  document.getElementById('stageFinal').style.display=name==='final'?'block':'none';
+  document.getElementById('stageInd').textContent=name.toUpperCase();
+  state.stage=name;
+}
+
+function renderSignals(signals) {
+  const grid=document.getElementById('signalsGrid');
+  const items=[
+    ['Recovery Status',signals.recoveryStatus],['Cognitive Load',signals.cognitiveLoad],
+    ['Burnout Risk',signals.burnoutRisk],['Execution Capacity',signals.executionCapacity],
+    ['Decision Quality Risk',signals.decisionQualityRisk],['Confidence Score',signals.confidenceScore+' / 100']
+  ];
+  grid.innerHTML=items.map(([label,val])=>`<div class="signal-badge"><span class="signal-label">${label}</span><span class="signal-value ${valColor[val]||'val-unknown'}">${val.toString().toUpperCase()}</span></div>`).join('');
+}
+
+function renderBriefing(b) {
+  document.getElementById('modeBanner').textContent=b.todayMode+' MODE';
+  document.getElementById('modeBanner').className='mode-banner '+modeClass[b.todayMode];
+  renderSignals(state.signals);
+  document.getElementById('briefingText').textContent=b.briefing;
+  document.getElementById('priorityRec').textContent=b.mainPriorityRecommendation;
+  document.getElementById('avoidRec').textContent=b.oneThingToAvoid;
+  document.getElementById('energyRec').textContent=b.energyStrategy;
+  document.getElementById('scheduleRec').textContent=b.scheduleAdjustment;
+  document.getElementById('riskRec').textContent=b.riskFlag;
+  document.getElementById('confidenceDisplay').textContent=b.confidenceScore+'/100';
+  const mal=document.getElementById('briefingMissingAlert');
+  if(b.missingData.length>0){mal.style.display='block';document.getElementById('briefingMissingList').textContent=b.missingData.map(f=>FIELD_LABELS[f]||f).join(', ');}
+  else mal.style.display='none';
+  document.querySelectorAll('.approval-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('warningBox').style.display='none';
+  document.getElementById('priorityInputWrap').style.display='none';
+}
+
+function renderFinalPlan(fp) {
+  document.getElementById('finalModeBanner').textContent=fp.confirmedMode+' MODE';
+  document.getElementById('finalModeBanner').className='mode-banner '+modeClass[fp.confirmedMode];
+  document.getElementById('fpMode').textContent=fp.confirmedMode;
+  document.getElementById('fpPriority').textContent=fp.confirmedPriority;
+  document.getElementById('fpSecondary').textContent=fp.secondaryTask;
+  document.getElementById('fpAvoid').textContent=fp.avoid;
+  document.getElementById('fpWorkload').textContent=fp.recommendedWorkload;
+  document.getElementById('fpRecovery').textContent=fp.recoveryAction;
+}
+
+function generateBriefing() {
+  const data=getData();
+  const missing=getMissing(data);
+  state.data=data;
+  if(missing.length>0){document.getElementById('missingAlert').style.display='block';document.getElementById('missingList').textContent=missing.map(f=>FIELD_LABELS[f]||f).join(', ');return;}
+  document.getElementById('missingAlert').style.display='none';
+  state.signals=analyzeSignals(data,missing);
+  state.briefing=genBriefing(data,state.signals,missing);
+  renderBriefing(state.briefing);
+  showStage('briefing');
+}
+
+function handleApproval(type) {
+  state.approval=type;
+  document.querySelectorAll('.approval-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('btn'+type.charAt(0).toUpperCase()+type.slice(1).replace('_',' ')).classList.add('active');
+  if(type==='add_data'){showStage('input');return;}
+  if(type==='adjust_priority'){document.getElementById('priorityInputWrap').style.display='block';document.getElementById('warningBox').style.display='none';return;}
+  document.getElementById('priorityInputWrap').style.display='none';
+  document.getElementById('warningBox').style.display='none';
+  let adjustment=null;
+  if(type==='lower_intensity')adjustment='lower';
+  else if(type==='increase_intensity'){
+    if(state.signals&&state.signals.recoveryStatus==='low'){document.getElementById('warningBox').style.display='block';document.getElementById('warningBox').textContent='WARNING: Your recovery is marked low. High-output mode carries risk of further degradation. Proceeding with reduced scope only.';}
+    adjustment='higher';
+  }
+  const plan=genFinalPlan(state.briefing,state.data,adjustment);
+  state.finalPlan=plan;
+  renderFinalPlan(plan);
+  showStage('final');
+}
+
+function submitAdjustedPriority() {
+  const np=document.getElementById('priorityInput').value.trim();
+  if(!np)return;
+  const updated={...state.data,mainPriority:np};
+  const missing=getMissing(updated);
+  const sig=analyzeSignals(updated,missing);
+  const b=genBriefing(updated,sig,missing);
+  state.data=updated;state.signals=sig;state.briefing=b;
+  const plan=genFinalPlan(b,updated);
+  state.finalPlan=plan;
+  renderFinalPlan(plan);
+  showStage('final');
+}
+
+function resetAll() {
+  ['sleepHours','sleepEnergy','stressLevel','calendarLoad','deepWork','mainPriority','notes'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  document.getElementById('sleepQuality').value='';
+  document.getElementById('cyclePhase').value='unknown';
+  document.querySelectorAll('.habit-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('missingAlert').style.display='none';
+  document.getElementById('warningBox').style.display='none';
+  document.getElementById('priorityInputWrap').style.display='none';
+  document.querySelectorAll('.approval-btn').forEach(b=>b.classList.remove('active'));
+  state={stage:'input',data:{sleepHours:'',sleepQuality:'',wakeEnergy:'',stressLevel:'',calendarLoad:'',deepWork:'',cyclePhase:'unknown',completedHabits:[],mainPriority:'',notes:''},signals:null,briefing:null,finalPlan:null,approval:'',intensityWarning:false};
+  showStage('input');
+}
+</script>
+</body>
+</html>
